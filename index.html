@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="wave.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="container">
@@ -42,9 +43,9 @@
             <section class="signup">
                 <h3>Stay Updated</h3>
                 <p>Sign up to receive updates on our web app launch and exclusive offers and deals. At WaterBoy we deliver!</p>
-                <form id="client-form" onsubmit="handleClientSubmit(event)">
+                <form id="client-form">
                     <div class="form-group">
-                        <label><input type="radio" name="client-status" value="yes" required> Yes</label>
+                        <label><input type="radio" name="client-status" value="yes"> Yes</label>
                         <label><input type="radio" name="client-status" value="no"> No</label>
                         <button type="submit" class="btn">Submit</button>
                     </div>
@@ -68,16 +69,57 @@
         </footer>
     </div>
 
-    <!-- Commented out WaveContainer and wave.js script -->
-    <!--
-    <div class="WaveContainer">
-        <svg viewBox="0 0 2880 200" preserveAspectRatio="none">
-            <path id="wave-path" class="wave-path" style="stroke: none; fill: #007bff;"></path>
-        </svg>
-    </div>
-    -->
+    <script>
+        document.getElementById('client-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
 
-    <script src="scripts.js"></script>
-    <!-- <script src="wave.js"></script> -->
+            const formMessage = document.getElementById('form-message');
+            const clientStatus = document.querySelector('input[name="client-status"]:checked');
+
+            formMessage.textContent = '';
+            formMessage.style.display = 'none';
+
+            if (!clientStatus) {
+                formMessage.textContent = 'Please select Yes or No.';
+                formMessage.style.color = '#dc3545';
+                formMessage.style.display = 'block';
+                return;
+            }
+
+            if (clientStatus.value === 'yes') {
+                Swal.fire({
+                    title: 'Customer Status',
+                    text: 'Are you an existing WaterBoy customer or a new one?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Existing',
+                    cancelButtonText: 'New',
+                    icon: 'question'
+                }).then((result) => {
+                    formMessage.style.display = 'block';
+                    if (result.isConfirmed) {
+                        window.open('https://docs.google.com/forms/d/e/1FAIpQLScSOBn22FQYogZYlcj77if4YDsFU2CNYvwpadEq_5ZsxcovDQ/viewform?usp=dialog', '_blank')
+                        formMessage.textContent = 'Welcome back, existing customer!';
+                        formMessage.style.color = '#28a745';
+                    } else {
+                        window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=header', '_blank')
+                        formMessage.textContent = 'Welcome, new customer!';
+                        formMessage.style.color = '#28a745';
+                    }
+                });
+            } else if (clientStatus.value === 'no') {
+                Swal.fire({
+                    title: 'Thank You',
+                    text: 'Thank you for choosing WaterBoy. We appreciate your interest and look forward to serving you!',
+                    confirmButtonText: 'Understood',
+                    icon: 'success'
+                }).then(() => {
+                    formMessage.textContent = 'We are excited to have you on board!';
+                    formMessage.style.color = '#28a745';
+                    formMessage.style.display = 'block';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

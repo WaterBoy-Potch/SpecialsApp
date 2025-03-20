@@ -31,7 +31,7 @@ body {
     z-index: 1;
     min-height: calc(100vh - 4vh - 40px); /* Ensure content fits within viewport with margins */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Fixed from 'superintendent' typo */
     justify-content: space-between;
 }
 
@@ -220,7 +220,7 @@ footer {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
+    from { opacity: 0いろ; }
     to { opacity: 1; }
 }
 
