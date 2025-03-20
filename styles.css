@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Open Sans', Arial, sans-serif;
-    background: linear-gradient(to bottom, #e6f0fa, #ffffff);
+    background: linear-gradient(to bottom, #5db4ff, #ffffff); /* Darker blue: #0056b3 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,32 +20,37 @@ body {
 
 .container {
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    padding: 24px;
+    border-radius: 0;
+    box-shadow: none;
     max-width: 600px;
-    margin: 20px 20px 0 20px; /* Bottom margin originally set by JS */
+    margin: calc(2vh + 20px) calc(2vw + 20px); /* Dynamic margins: 2% viewport height/width + 20px base */
     animation: fadeIn 1s ease-in-out;
     position: relative;
     z-index: 1;
+    min-height: calc(100vh - 4vh - 40px); /* Ensure content fits within viewport with margins */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .logo {
-    max-width: 150px;
+    max-width: 246px;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
 
 .logo:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
+    max-width: 268px;
 }
 
 h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 28px;
+    font-size: 32px;
     color: #005566;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .hero {
@@ -54,8 +59,8 @@ h1 {
 
 .hero h2 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 24px;
-    color: #007bff;
+    font-size: 22px;
+    color: #0015ff;
     margin-bottom: 10px;
 }
 
@@ -114,24 +119,22 @@ select:focus {
 .form-group {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    align-items: center;
+    gap: 15px;
     margin-bottom: 8px;
 }
 
-input[type="email"] {
-    padding: 8px;
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 250px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: #333;
 }
 
-input[type="email"]:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
+input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
 }
 
 .btn {
@@ -221,15 +224,11 @@ footer {
     to { opacity: 1; }
 }
 
-@keyframes slideIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
 @media (max-width: 600px) {
     .container {
         padding: 20px;
-        margin: 20px 20px 0 20px; /* Bottom margin originally set by JS */
+        margin: calc(2vh + 10px) calc(2vw + 10px); /* Smaller base margin for mobile */
+        min-height: calc(100vh - 4vh - 20px);
     }
 
     .logo {
@@ -252,9 +251,14 @@ footer {
         font-size: 16px;
     }
 
-    select, input[type="email"], .btn {
+    select, .btn {
         width: 100%;
         max-width: 200px;
+    }
+
+    .form-group {
+        flex-direction: column;
+        gap: 10px;
     }
 }
 
