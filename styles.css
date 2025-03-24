@@ -84,7 +84,7 @@ body {
 }
 
 .logo {
-    max-width: 563px; /* Increased from 375px (375 × 1.5) */
+    max-width: 563px;
     margin-bottom: 10px;
 }
 
@@ -179,24 +179,7 @@ select:focus {
 .form-group {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
     margin-bottom: 5px;
-}
-
-.form-group label {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 15px;
-    color: #333;
-}
-
-input[type="radio"] {
-    margin: 0;
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
 }
 
 .btn {
@@ -288,6 +271,11 @@ footer {
     transform: scale(1.2);
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 8px;
@@ -296,7 +284,7 @@ footer {
     }
 
     .logo {
-        max-width: 270px; /* Increased from 180px (180 × 1.5) */
+        max-width: 270px;
     }
 
     h1 {
@@ -326,7 +314,6 @@ footer {
 
     .form-group {
         flex-direction: column;
-        gap: 8px;
     }
 
     .claim-info {

@@ -55,9 +55,7 @@
                 <p>Register now to claim coupons and receive exclusive offers and deals. At WaterBoy we deliver!</p>
                 <form id="client-form">
                     <div class="form-group">
-                        <label><input type="radio" name="client-status" value="yes"> Yes</label>
-                        <label><input type="radio" name="client-status" value="no"> No</label>
-                        <button type="submit" class="btn">Submit</button>
+                        <button type="submit" class="btn">Sign Up</button>
                     </div>
                     <p class="form-message" id="form-message"></p>
                 </form>
@@ -86,50 +84,29 @@
             event.stopPropagation();
 
             const formMessage = document.getElementById('form-message');
-            const clientStatus = document.querySelector('input[name="client-status"]:checked');
 
             formMessage.textContent = '';
             formMessage.style.display = 'none';
 
-            if (!clientStatus) {
-                formMessage.textContent = 'Please select Yes or No.';
-                formMessage.style.color = '#dc3545';
+            Swal.fire({
+                title: 'Customer Status',
+                text: 'Are you an existing WaterBoy customer or a new one?',
+                showCancelButton: true,
+                confirmButtonText: 'Existing',
+                cancelButtonText: 'New',
+                icon: 'question'
+            }).then((result) => {
                 formMessage.style.display = 'block';
-                return;
-            }
-
-            if (clientStatus.value === 'yes') {
-                Swal.fire({
-                    title: 'Customer Status',
-                    text: 'Are you an existing WaterBoy customer or a new one?',
-                    showCancelButton: true,
-                    confirmButtonText: 'Existing',
-                    cancelButtonText: 'New',
-                    icon: 'question'
-                }).then((result) => {
-                    formMessage.style.display = 'block';
-                    if (result.isConfirmed) {
-                        window.open('https://docs.google.com/forms/d/e/1FAIpQLScSOBn22FQYogZYlcj77if4YDsFU2CNYvwpadEq_5ZsxcovDQ/viewform?usp=sharing', '_blank');
-                        formMessage.textContent = 'Welcome back, existing customer!';
-                        formMessage.style.color = '#28a745';
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=sharing', '_blank');
-                        formMessage.textContent = 'Welcome, new customer!';
-                        formMessage.style.color = '#28a745';
-                    }
-                });
-            } else if (clientStatus.value === 'no') {
-                Swal.fire({
-                    title: 'Thank You',
-                    text: 'Thank you for choosing WaterBoy. We appreciate your interest and look forward to serving you!',
-                    confirmButtonText: 'Understood',
-                    icon: 'success'
-                }).then(() => {
-                    formMessage.textContent = 'We are excited to have you on board!';
+                if (result.isConfirmed) {
+                    window.open('https://docs.google.com/forms/d/e/1FAIpQLScSOBn22FQYogZYlcj77if4YDsFU2CNYvwpadEq_5ZsxcovDQ/viewform?usp=sharing', '_blank');
+                    formMessage.textContent = 'Welcome back, existing customer!';
                     formMessage.style.color = '#28a745';
-                    formMessage.style.display = 'block';
-                });
-            }
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=sharing', '_blank');
+                    formMessage.textContent = 'Welcome, new customer!';
+                    formMessage.style.color = '#28a745';
+                }
+            });
         });
 
         // Make Previous Specials dropdown read-only but viewable
