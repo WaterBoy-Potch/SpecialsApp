@@ -24,8 +24,8 @@
             </section>
             <section class="previous-specials">
                 <h3>Previous Months' Specials</h3>
-                <select id="previous-specials-dropdown" aria-label="Previous Months' Specials">
-                    <option value="" disabled selected>Select a special</option>
+                <select id="previous-specials-dropdown" aria-label="Previous Months' Specials" class="readonly-select">
+                    <option value="" selected>View past specials</option>
                     <option value="feb2025">Feb 2025: 15% off Bulk Orders</option>
                     <option value="jan2025">Jan 2025: Buy 2 Get 1 Free</option>
                     <option value="dec2024">Dec 2024: 10% off All Rentals</option>
@@ -99,11 +99,11 @@
                 }).then((result) => {
                     formMessage.style.display = 'block';
                     if (result.isConfirmed) {
-                        window.open('https://docs.google.com/forms/d/e/1FAIpQLScSOBn22FQYogZYlcj77if4YDsFU2CNYvwpadEq_5ZsxcovDQ/viewform?usp=header', '_blank');
+                        window.open('https://docs.google.com/forms/d/e/1FAIpQLScSOBn22FQYogZYlcj77if4YDsFU2CNYvwpadEq_5ZsxcovDQ/viewform?usp=sharing', '_blank');
                         formMessage.textContent = 'Welcome back, existing customer!';
                         formMessage.style.color = '#28a745';
-                    } else {
-                        window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=header', '_blank');
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=sharing', '_blank');
                         formMessage.textContent = 'Welcome, new customer!';
                         formMessage.style.color = '#28a745';
                     }
@@ -120,6 +120,13 @@
                     formMessage.style.display = 'block';
                 });
             }
+        });
+
+        // Make Previous Specials dropdown read-only but viewable
+        const previousDropdown = document.getElementById('previous-specials-dropdown');
+        previousDropdown.addEventListener('change', function(event) {
+            event.preventDefault();
+            this.value = ''; // Reset to default value
         });
     </script>
 </body>
