@@ -36,14 +36,14 @@ body {
 }
 
 .logo {
-    max-width: 300px; /* Increased from 246px */
+    max-width: 300px;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
 
 .logo:hover {
     transform: scale(1.08);
-    max-width: 324px; /* Increased from 268px */
+    max-width: 324px;
 }
 
 h1 {
@@ -100,7 +100,7 @@ select:focus {
 }
 
 .claim-coupon {
-    margin-top: 10px; /* Space between dropdown and button */
+    margin-top: 10px;
 }
 
 .signup {
@@ -230,13 +230,13 @@ footer {
 
 @media (max-width: 600px) {
     .container {
-        padding: 16px; /* Reduced from 20px */
-        margin: calc(1vh + 5px) calc(1vw + 5px); /* Reduced from 2vh + 10px */
-        min-height: calc(80vh - 2vh - 10px); /* Reduced from 100vh - 4vh - 20px */
+        padding: 16px;
+        margin: calc(1vh + 5px) calc(1vw + 5px);
+        min-height: calc(80vh - 2vh - 10px);
     }
 
     .logo {
-        max-width: 150px; /* Increased from 100px for mobile */
+        max-width: 150px;
     }
 
     h1 {

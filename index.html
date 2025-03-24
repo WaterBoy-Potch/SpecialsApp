@@ -64,7 +64,6 @@
             <p>Follow us on social media for updates:</p>
             <div class="social-links">
                 <a href="https://www.facebook.com/water8boypotch" target="_blank" aria-label="Follow Water Boy on Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.twitter.com" target="_blank" aria-label="Follow Water Boy on Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="https://www.instagram.com/waterboypotch/" target="_blank" aria-label="Follow Water Boy on Instagram"><i class="fab fa-instagram"></i></a>
             </div>
             <p>Visit <a href="https://www.water-boy.co.za">www.water-boy.co.za</a> for more information about our services.</p>
@@ -72,7 +71,10 @@
     </div>
 
     <script>
-        // Client Form Submission
+        // Google Apps Script Web App URL for Current Specials
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwqyG-OOGlEawpFshQe63uo_BkrRUQX5MW3iVXhr-3fA1xvnLFsW2d6NIw3Y2hkosY9/exec';
+
+        // Client Form Submission (unchanged)
         document.getElementById('client-form').addEventListener('submit', function(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -126,25 +128,146 @@
 
         // Claim Coupon Buttons
         document.querySelectorAll('.claim-coupon').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', async function() {
                 const dropdownType = this.getAttribute('data-dropdown');
                 const dropdown = document.getElementById(`${dropdownType}-specials-dropdown`);
                 const selectedOption = dropdown.options[dropdown.selectedIndex].text;
 
-                if (dropdown.selectedIndex === 0) { // No option selected (default "Select a special")
+                if (dropdown.selectedIndex === 0) { // No option selected
                     Swal.fire({
                         title: 'Error',
                         text: 'Please select a special to claim a coupon.',
                         icon: 'error',
                         confirmButtonText: 'OK'
                     });
-                } else {
-                    Swal.fire({
-                        title: 'Coupon Claimed!',
-                        text: `You have successfully claimed: ${selectedOption}. Enjoy your WaterBoy special!`,
-                        icon: 'success',
-                        confirmButtonText: 'Great'
+                    return;
+                }
+
+                if (dropdownType === 'previous') {
+                    // Previous Specials: Email or Cell Number popup, submit to Google Form
+                    const { value: formValues } = await Swal.fire({
+                        title: 'Claim Previous Coupon',
+                        html:
+                            '<input id="swal-input1" class="swal2-input" placeholder="Email (optional)" type="email">' +
+                            '<input id="swal-input2" class="swal2-input" placeholder="Cell Number (optional)" type="tel">',
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Submit',
+                        cancelButtonText: 'Cancel',
+                        preConfirm: () => {
+                            const email = document.getElementById('swal-input1').value;
+                            const cell = document.getElementById('swal-input2').value;
+                            if (!email && !cell) {
+                                Swal.showValidationMessage('Please enter either an email or a cell number');
+                                return false;
+                            }
+                            if (email && !/\S+@\S+\.\S+/.test(email)) {
+                                Swal.showValidationMessage('Please enter a valid email address');
+                                return false;
+                            }
+                            if (cell && !/^\d{10,}$/.test(cell)) {
+                                Swal.showValidationMessage('Please enter a valid cell number (at least 10 digits)');
+                                return false;
+                            }
+                            return { email, cell };
+                        }
                     });
+
+                    if (formValues) {
+                        // Submit to Google Form silently
+                        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfxC9EXSrTbrYPJjOcfQhrjPnBYW9tWg2qxSQcAEpCM6FUcJQ/formResponse';
+                        const formData = new FormData();
+                        // Replace these entry IDs with your actual Google Form field IDs
+                        formData.append('entry.1234567890', selectedOption); // Coupon (placeholder ID)
+                        formData.append('entry.987654321', formValues.email || ''); // Email (placeholder ID)
+                        formData.append('entry.456789123', formValues.cell || ''); // Cell (placeholder ID)
+
+                        fetch(formUrl, {
+                            method: 'POST',
+                            mode: 'no-cors', // Silent submission
+                            body: formData
+                        })
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Coupon Claimed!',
+                                text: `You have successfully claimed: ${selectedOption}. Details recorded.`,
+                                icon: 'success',
+                                confirmButtonText: 'Great'
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error submitting to form:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Failed to save your claim. Please try again.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    }
+                } else if (dropdownType === 'current') {
+                    // Current Specials: Existing behavior with Google Sheet
+                    const { value: formValues } = await Swal.fire({
+                        title: 'Claim Your Coupon',
+                        html:
+                            '<input id="swal-input1" class="swal2-input" placeholder="Email" type="email" required>' +
+                            '<input id="swal-input2" class="swal2-input" placeholder="Cell Number" type="tel" required>',
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Submit',
+                        cancelButtonText: 'Cancel',
+                        preConfirm: () => {
+                            const email = document.getElementById('swal-input1').value;
+                            const cell = document.getElementById('swal-input2').value;
+                            if (!email || !cell) {
+                                Swal.showValidationMessage('Please enter both email and cell number');
+                                return false;
+                            }
+                            if (!/\S+@\S+\.\S+/.test(email)) {
+                                Swal.showValidationMessage('Please enter a valid email address');
+                                return false;
+                            }
+                            if (!/^\d{10,}$/.test(cell)) {
+                                Swal.showValidationMessage('Please enter a valid cell number (at least 10 digits)');
+                                return false;
+                            }
+                            return { email, cell };
+                        }
+                    });
+
+                    if (formValues) {
+                        const data = {
+                            coupon: selectedOption,
+                            email: formValues.email,
+                            cell: formValues.cell
+                        };
+
+                        fetch(GOOGLE_SHEET_URL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Coupon Claimed!',
+                                text: `You have successfully claimed: ${selectedOption}. Details sent to ${formValues.email} and ${formValues.cell}.`,
+                                icon: 'success',
+                                confirmButtonText: 'Great'
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error saving to sheet:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Failed to save your claim. Please try again.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    }
                 }
             });
         });
