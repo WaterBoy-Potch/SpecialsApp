@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    line-height: 1.4; /* Reduced from 1.6 */
+    line-height: 1.4;
     color: #333;
     position: relative;
     overflow-x: hidden;
@@ -21,36 +21,30 @@ body {
 .container {
     text-align: center;
     background-color: transparent;
-    padding: 10px; /* Reduced from 16px */
+    padding: 10px;
     border-radius: 0;
     box-shadow: none;
     max-width: 500px;
-    margin: 5px; /* Reduced from 10px */
+    margin: 5px;
     animation: fadeIn 1s ease-in-out;
     position: relative;
     z-index: 1;
-    min-height: calc(100vh - 10px); /* Adjusted from 20px */
+    min-height: calc(100vh - 10px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .logo {
-    max-width: 250px;
-    margin-bottom: 10px; /* Reduced from 15px */
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.08);
-    max-width: 270px;
+    max-width: 375px; /* Increased size maintained, hover effect removed */
+    margin-bottom: 10px;
 }
 
 h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 28px;
     color: #005566;
-    margin-bottom: 5px; /* Reduced from 8px */
+    margin-bottom: 5px;
 }
 
 .hero {
@@ -61,7 +55,7 @@ h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
     color: #0015ff;
-    margin-bottom: 5px; /* Reduced from 8px */
+    margin-bottom: 5px;
 }
 
 .hero p {
@@ -70,18 +64,18 @@ h1 {
 }
 
 .current-specials, .previous-specials {
-    margin: 15px 0; /* Reduced from 20px */
+    margin: 15px 0;
 }
 
 .current-specials h3, .previous-specials h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     color: #005566;
-    margin-bottom: 5px; /* Reduced from 8px */
+    margin-bottom: 5px;
 }
 
 select {
-    padding: 4px; /* Reduced from 6px */
+    padding: 4px;
     font-size: 13px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -113,39 +107,39 @@ select:focus {
 .claim-info {
     font-size: 13px;
     color: #007bff;
-    margin-top: 5px; /* Reduced from 8px */
+    margin-top: 5px;
     font-weight: bold;
 }
 
 .signup {
-    margin: 15px 0; /* Reduced from 25px */
+    margin: 15px 0;
 }
 
 .signup h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
     color: #005566;
-    margin-bottom: 5px; /* Reduced from 8px */
+    margin-bottom: 5px;
 }
 
 .signup p {
     font-size: 14px;
     color: #666;
-    margin-bottom: 10px; /* Reduced from 15px */
+    margin-bottom: 10px;
 }
 
 .form-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Reduced from 15px */
-    margin-bottom: 5px; /* Reduced from 8px */
+    gap: 10px;
+    margin-bottom: 5px;
 }
 
 .form-group label {
     display: flex;
     align-items: center;
-    gap: 3px; /* Reduced from 4px */
+    gap: 3px;
     font-size: 15px;
     color: #333;
 }
@@ -158,7 +152,7 @@ input[type="radio"] {
 }
 
 .btn {
-    padding: 6px 12px; /* Reduced from 8px 16px */
+    padding: 6px 12px;
     font-size: 15px;
     background-color: #007bff;
     color: white;
@@ -185,14 +179,14 @@ input[type="radio"] {
 }
 
 .contact {
-    margin: 15px 0; /* Reduced from 20px */
+    margin: 15px 0;
 }
 
 .contact h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 18px;
     color: #005566;
-    margin-bottom: 5px; /* Reduced from 8px */
+    margin-bottom: 5px;
 }
 
 .contact p {
@@ -203,7 +197,7 @@ input[type="radio"] {
 .contact-link {
     color: #007bff;
     text-decoration: none;
-    margin: 0 3px; /* Reduced from 4px */
+    margin: 0 3px;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
@@ -214,23 +208,23 @@ input[type="radio"] {
 }
 
 .contact-link i {
-    margin-right: 3px; /* Reduced from 4px */
+    margin-right: 3px;
 }
 
 footer {
-    margin-top: 15px; /* Reduced from 20px */
+    margin-top: 15px;
     font-size: 13px;
     color: #666;
 }
 
 .social-links {
-    margin: 5px 0; /* Reduced from 8px */
+    margin: 5px 0;
 }
 
 .social-links a {
     color: #007bff;
     font-size: 18px;
-    margin: 0 6px; /* Reduced from 8px */
+    margin: 0 6px;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
@@ -246,13 +240,13 @@ footer {
 
 @media (max-width: 600px) {
     .container {
-        padding: 8px; /* Reduced from 12px */
-        margin: 3px; /* Reduced from 5px */
-        min-height: calc(80vh - 6px); /* Adjusted from 10px */
+        padding: 8px;
+        margin: 3px;
+        min-height: calc(80vh - 6px);
     }
 
     .logo {
-        max-width: 120px;
+        max-width: 180px; /* Increased from 120px (120 × 1.5) */
     }
 
     h1 {
@@ -282,7 +276,7 @@ footer {
 
     .form-group {
         flex-direction: column;
-        gap: 8px; /* Reduced from 10px */
+        gap: 8px;
     }
 
     .claim-info {
