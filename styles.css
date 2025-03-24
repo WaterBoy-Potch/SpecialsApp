@@ -220,7 +220,7 @@ footer {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0いろ; }
+    from { opacity: 0; } /* Fixed typo by removing 'いろ' */
     to { opacity: 1; }
 }
 
