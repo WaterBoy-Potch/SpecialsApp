@@ -30,6 +30,7 @@
                     <option value="jan2025">Jan 2025: Buy 2 Get 1 Free</option>
                     <option value="dec2024">Dec 2024: 10% off All Rentals</option>
                 </select>
+                <button type="button" class="btn claim-coupon" data-dropdown="previous">Claim Coupon</button>
             </section>
             <section class="current-specials">
                 <h3>Current Month's Specials</h3>
@@ -38,6 +39,7 @@
                     <option value="special1">March 2025: 20% off 5L Bottles</option>
                     <option value="special2">March 2025: Free Dispenser Rental</option>
                 </select>
+                <button type="button" class="btn claim-coupon" data-dropdown="current">Claim Coupon</button>
             </section>
             
             <section class="signup">
@@ -70,6 +72,7 @@
     </div>
 
     <script>
+        // Client Form Submission
         document.getElementById('client-form').addEventListener('submit', function(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -119,6 +122,31 @@
                     formMessage.style.display = 'block';
                 });
             }
+        });
+
+        // Claim Coupon Buttons
+        document.querySelectorAll('.claim-coupon').forEach(button => {
+            button.addEventListener('click', function() {
+                const dropdownType = this.getAttribute('data-dropdown');
+                const dropdown = document.getElementById(`${dropdownType}-specials-dropdown`);
+                const selectedOption = dropdown.options[dropdown.selectedIndex].text;
+
+                if (dropdown.selectedIndex === 0) { // No option selected (default "Select a special")
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Please select a special to claim a coupon.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Coupon Claimed!',
+                        text: `You have successfully claimed: ${selectedOption}. Enjoy your WaterBoy special!`,
+                        icon: 'success',
+                        confirmButtonText: 'Great'
+                    });
+                }
+            });
         });
     </script>
 </body>
