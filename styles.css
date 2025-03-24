@@ -161,6 +161,9 @@ select:focus {
 
 .signup {
     margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Ensures content inside signup section is centered */
 }
 
 .signup h3 {
@@ -178,27 +181,29 @@ select:focus {
 
 .form-group {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centers the button horizontally */
     margin-bottom: 5px;
 }
 
-.btn {
-    padding: 6px 12px;
-    font-size: 15px;
+.signup-btn {
+    padding: 6px 16px; /* Reduced from 10px 20px by 4px */
+    font-size: 14px; /* Reduced from 18px by 4px */
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    max-width: 200px; /* Maintains consistent width */
 }
 
-.btn:hover {
+.signup-btn:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
 
-.btn:active {
+.signup-btn:active {
     transform: scale(0.95);
 }
 
@@ -307,9 +312,16 @@ footer {
         font-size: 18px;
     }
 
-    select, .btn {
+    select {
         width: 100%;
         max-width: 180px;
+    }
+
+    .signup-btn {
+        width: 100%;
+        max-width: 180px; /* Slightly smaller on mobile */
+        padding: 4px 12px; /* Reduced from 8px 16px by 4px */
+        font-size: 12px; /* Reduced from 16px by 4px */
     }
 
     .form-group {
@@ -339,7 +351,7 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .container, .btn, .contact-link, .social-links a {
+    .container, .signup-btn, .contact-link, .social-links a {
         animation: none;
         transition: none;
     }
