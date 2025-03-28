@@ -116,12 +116,16 @@
             });
         });
 
-        // Video Overlay Functionality with Boolean
+        // Video Overlay Functionality with Boolean and Orientation Handling
         document.addEventListener('DOMContentLoaded', function() {
             const videoOverlay = document.getElementById('videoOverlay');
-            const closeVideo = document.getElementById('closeVideo');
+            const videoContainer = document.querySelector('.video-container');
             const promoVideo = document.getElementById('promoVideo');
+            const closeVideo = document.getElementById('closeVideo');
             let shouldPlayVideo = true; // Default to true for autoplay on load
+
+            // Ensure video starts with sound
+            promoVideo.muted = false;
 
             // Function to update overlay visibility and video state
             function updateVideoState() {
@@ -129,15 +133,43 @@
                     videoOverlay.style.display = 'flex';
                     promoVideo.play().catch(error => {
                         console.error('Video autoplay failed:', error);
-                        // Optionally mute video to bypass autoplay restrictions
-                        promoVideo.muted = true;
-                        promoVideo.play();
+                        // Fallback: Inform user if sound prevents autoplay
+                        Swal.fire({
+                            title: 'Autoplay Blocked',
+                            text: 'Your browser may require interaction to play video with sound. Click OK to try again.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            promoVideo.play();
+                        });
                     });
                 } else {
                     promoVideo.pause();
                     videoOverlay.style.display = 'none';
                 }
             }
+
+            // Adjust video container based on orientation
+            function adjustVideoOrientation() {
+                const videoWidth = promoVideo.videoWidth;
+                const videoHeight = promoVideo.videoHeight;
+                const isPortrait = videoHeight > videoWidth;
+
+                if (isPortrait) {
+                    videoContainer.style.maxWidth = '50%'; // Narrower for portrait
+                    videoContainer.style.maxHeight = '80vh'; // Taller to fit portrait
+                    promoVideo.style.width = '100%';
+                    promoVideo.style.height = 'auto';
+                } else {
+                    videoContainer.style.maxWidth = '90%'; // Wider for landscape
+                    videoContainer.style.maxHeight = '50vh'; // Shorter for landscape
+                    promoVideo.style.width = '100%';
+                    promoVideo.style.height = 'auto';
+                }
+            }
+
+            // Wait for video metadata to load to determine orientation
+            promoVideo.addEventListener('loadedmetadata', adjustVideoOrientation);
 
             // Initial state on page load
             updateVideoState();
