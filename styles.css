@@ -21,7 +21,7 @@ body {
 /* Video Overlay Styles */
 .video-overlay {
     position: fixed;
-    top: 0;
+    bottom: 0; /* Changed from top: 0 to anchor to bottom */
     left: 0;
     width: 100%;
     height: 29.17vh; /* 7/24 of viewport height ≈ 29.17% */
@@ -69,15 +69,15 @@ body {
 .container {
     text-align: center;
     background-color: transparent;
-    padding: 5px; /* Reduced from 10px */
+    padding: 5px; /* Reduced from 10px to bring content closer to top */
     border-radius: 0;
     box-shadow: none;
     max-width: 500px;
-    margin: 2px; /* Reduced from 5px */
+    margin: 5px;
     animation: fadeIn 1s ease-in-out;
     position: relative;
     z-index: 1;
-    min-height: calc(100vh - 4px); /* Adjusted for reduced margin */
+    min-height: calc(100vh - 10px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -85,14 +85,14 @@ body {
 
 .logo {
     max-width: 563px;
-    margin-bottom: 5px; /* Reduced from 10px */
+    margin-bottom: 5px; /* Reduced from 10px to bring logo closer to top */
 }
 
 h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 28px;
     color: #005566;
-    margin-bottom: 3px; /* Reduced from 5px */
+    margin-bottom: 5px;
 }
 
 .hero {
@@ -103,7 +103,7 @@ h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
     color: #0015ff;
-    margin-bottom: 3px; /* Reduced from 5px */
+    margin-bottom: 5px;
 }
 
 .hero p {
@@ -112,14 +112,14 @@ h1 {
 }
 
 .current-specials, .previous-specials {
-    margin: 8px 0; /* Reduced from 15px */
+    margin: 15px 0;
 }
 
 .current-specials h3, .previous-specials h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     color: #005566;
-    margin-bottom: 3px; /* Reduced from 5px */
+    margin-bottom: 5px;
 }
 
 select {
@@ -155,55 +155,67 @@ select:focus {
 .claim-info {
     font-size: 13px;
     color: #007bff;
-    margin-top: 3px; /* Reduced from 5px */
+    margin-top: 5px;
     font-weight: bold;
 }
 
 .signup {
-    margin: 8px 0; /* Reduced from 15px */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 15px 0;
 }
 
 .signup h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
     color: #005566;
-    margin-bottom: 3px; /* Reduced from 5px */
+    margin-bottom: 5px;
 }
 
 .signup p {
     font-size: 14px;
     color: #666;
-    margin-bottom: 6px; /* Reduced from 10px */
+    margin-bottom: 10px;
 }
 
 .form-group {
     display: flex;
     justify-content: center;
-    margin-bottom: 3px; /* Reduced from 5px */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
 }
 
-.signup-btn {
-    padding: 6px 16px;
-    font-size: 14px;
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 15px;
+    color: #333;
+}
+
+input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.btn {
+    padding: 6px 12px;
+    font-size: 15px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 100%;
-    max-width: 200px;
 }
 
-.signup-btn:hover {
+.btn:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
 
-.signup-btn:active {
+.btn:active {
     transform: scale(0.95);
 }
 
@@ -215,14 +227,14 @@ select:focus {
 }
 
 .contact {
-    margin: 8px 0; /* Reduced from 15px */
+    margin: 15px 0;
 }
 
 .contact h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 18px;
     color: #005566;
-    margin-bottom: 3px; /* Reduced from 5px */
+    margin-bottom: 5px;
 }
 
 .contact p {
@@ -248,18 +260,20 @@ select:focus {
 }
 
 footer {
-    margin-top: 8px; /* Reduced from 15px */
+    margin-top: 15px;
+    font-size: 13px;
+    color: #666;
 }
 
 .footer-line {
     width: 80%;
-    margin: 0 auto 6px auto; /* Reduced bottom margin from 10px */
+    margin: 0 auto 10px auto;
     border: 0;
     border-top: 1px solid #666;
 }
 
 .social-links {
-    margin: 3px 0; /* Reduced from 5px */
+    margin: 5px 0;
 }
 
 .social-links a {
@@ -274,82 +288,55 @@ footer {
     transform: scale(1.2);
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @media (max-width: 600px) {
     .container {
-        padding: 4px; /* Reduced from 8px */
-        margin: 1px; /* Reduced from 3px */
-        min-height: calc(80vh - 2px); /* Adjusted for reduced margin */
+        padding: 5px; /* Reduced from 8px */
+        margin: 3px;
+        min-height: calc(80vh - 6px);
     }
 
     .logo {
         max-width: 270px;
-        margin-bottom: 3px; /* Reduced from 5px (desktop value) */
+        margin-bottom: 5px; /* Reduced from implicit 10px */
     }
 
     h1 {
         font-size: 22px;
-        margin-bottom: 2px; /* Reduced from 3px (desktop value) */
     }
 
     .hero h2 {
         font-size: 18px;
-        margin-bottom: 2px; /* Reduced from 3px (desktop value) */
     }
 
     .hero p, .signup p, .contact p, footer p {
         font-size: 11px;
     }
 
-    .current-specials, .previous-specials {
-        margin: 5px 0; /* Reduced from 8px (desktop value) */
-    }
-
     .current-specials h3, .previous-specials h3 {
         font-size: 14px;
-        margin-bottom: 2px; /* Reduced from 3px (desktop value) */
-    }
-
-    .signup {
-        margin: 5px 0; /* Reduced from 8px (desktop value) */
     }
 
     .signup h3 {
         font-size: 18px;
-        margin-bottom: 2px; /* Reduced from 3px (desktop value) */
     }
 
-    .signup p {
-        margin-bottom: 4px; /* Reduced from 6px (desktop value) */
-    }
-
-    select {
+    select, .btn {
         width: 100%;
         max-width: 180px;
-    }
-
-    .signup-btn {
-        width: 100%;
-        max-width: 180px;
-        padding: 4px 12px;
-        font-size: 12px;
     }
 
     .form-group {
-        margin-bottom: 2px; /* Reduced from 3px (desktop value) */
+        flex-direction: column;
+        gap: 8px;
     }
 
     .claim-info {
         font-size: 11px;
-        margin-top: 2px; /* Reduced from 3px (desktop value) */
-    }
-
-    .contact {
-        margin: 5px 0; /* Reduced from 8px (desktop value) */
-    }
-
-    .contact h3 {
-        font-size: 14px; /* Adjusted from 18px for consistency */
-        margin-bottom: 2px; /* Reduced from 3px (desktop value) */
     }
 
     .video-overlay {
@@ -366,20 +353,12 @@ footer {
 
     .footer-line {
         width: 90%;
-        margin-bottom: 4px; /* Reduced from 8px */
-    }
-
-    footer {
-        margin-top: 5px; /* Reduced from 8px (desktop value) */
-    }
-
-    .social-links {
-        margin: 2px 0; /* Reduced from 3px (desktop value) */
+        margin-bottom: 8px;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .container, .signup-btn, .contact-link, .social-links a {
+    .container, .btn, .contact-link, .social-links a {
         animation: none;
         transition: none;
     }
