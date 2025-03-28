@@ -14,16 +14,20 @@
 <body>
     <div class="video-overlay" id="videoOverlay">
         <div class="video-container">
-            <video id="promoVideo" controls>
-                <source src="promo-video.mp4" type="video/mp4">
+            <video id="promoVideo" controls autoplay>
+                <source src="PromoAd.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+        </div>
+        <div class="close-button-layer" id="closeButtonLayer">
             <button class="close-video" id="closeVideo"><i class="fas fa-times"></i></button>
         </div>
     </div>
     <div class="container">
         <header>
-            <img src="logo.png" alt="Water Boy Logo" class="logo">
+            <div class="logo-container">
+                <img src="logo.png" alt="Water Boy Logo" class="logo">
+            </div>
             <h1>Exclusive<br>WaterBoy Monthly Offers</h1>
         </header>
         <main>
@@ -33,23 +37,26 @@
             </section>
             <section class="previous-specials">
                 <h3>Previous Months' Specials</h3>
-                <select id="previous-specials-dropdown" aria-label="Previous Months' Specials" class="readonly-select">
-                    <option value="" selected>View past specials</option>
-                    <option value="feb2025">Feb 2025: 15% off Bulk Orders</option>
-                    <option value="jan2025">Jan 2025: Buy 2 Get 1 Free</option>
-                    <option value="dec2024">Dec 2024: 10% off All Rentals</option>
-                </select>
+                <div class="specials-container" id="previousSpecials">
+                    <div class="special-item" data-image="coupon-feb2025.jpg">Feb 2025: 15% off Bulk Orders</div>
+                    <div class="special-item" data-image="coupon-jan2025.jpg">Jan 2025: Buy 2 Get 1 Free</div>
+                    <div class="special-item" data-image="coupon-dec2024.jpg">Dec 2024: 10% off All Rentals</div>
+                </div>
+                <div class="special-image-container" id="previousSpecialImage">
+                    <img src="" alt="Selected Previous Special" id="previousImage">
+                </div>
             </section>
             <section class="current-specials">
                 <h3>Current Month's Specials</h3>
-                <select id="current-specials-dropdown" aria-label="Current Month's Specials">
-                    <option value="" disabled selected>Select a special</option>
-                    <option value="special1">March 2025: 20% off 5L Bottles</option>
-                    <option value="special2">March 2025: Free Dispenser Rental</option>
-                </select>
+                <div class="specials-container" id="currentSpecials">
+                    <div class="special-item" data-image="coupon-mar2025-20off.jpg">March 2025: 20% off 5L Bottles</div>
+                    <div class="special-item" data-image="coupon-mar2025-free.jpg">March 2025: Free Dispenser Rental</div>
+                </div>
+                <div class="special-image-container" id="currentSpecialImage">
+                    <img src="" alt="Selected Current Special" id="currentImage">
+                </div>
                 <p class="claim-info">To claim a coupon, please sign up below!</p>
             </section>
-            
             <section class="signup">
                 <h3>Sign Up for Exclusive Offers</h3>
                 <p>Register now to claim coupons and receive exclusive offers and deals. At WaterBoy we deliver!</p>
@@ -109,26 +116,58 @@
             });
         });
 
-        // Make Previous Specials dropdown read-only but viewable
-        const previousDropdown = document.getElementById('previous-specials-dropdown');
-        previousDropdown.addEventListener('change', function(event) {
-            event.preventDefault();
-            this.value = '';
-        });
-
-        // Video Overlay Functionality
+        // Video Overlay Functionality with Boolean
         document.addEventListener('DOMContentLoaded', function() {
             const videoOverlay = document.getElementById('videoOverlay');
             const closeVideo = document.getElementById('closeVideo');
             const promoVideo = document.getElementById('promoVideo');
+            let shouldPlayVideo = true; // Default to true for autoplay on load
 
-            // Show overlay on page load
-            videoOverlay.style.display = 'block';
+            // Function to update overlay visibility and video state
+            function updateVideoState() {
+                if (shouldPlayVideo) {
+                    videoOverlay.style.display = 'flex';
+                    promoVideo.play().catch(error => {
+                        console.error('Video autoplay failed:', error);
+                        // Optionally mute video to bypass autoplay restrictions
+                        promoVideo.muted = true;
+                        promoVideo.play();
+                    });
+                } else {
+                    promoVideo.pause();
+                    videoOverlay.style.display = 'none';
+                }
+            }
 
-            // Close overlay when close button is clicked
+            // Initial state on page load
+            updateVideoState();
+
+            // Close button click sets boolean to false
             closeVideo.addEventListener('click', function() {
-                promoVideo.pause(); // Pause the video when closing
-                videoOverlay.style.display = 'none';
+                shouldPlayVideo = false;
+                updateVideoState();
+            });
+
+            // Video end sets boolean to false
+            promoVideo.addEventListener('ended', function() {
+                shouldPlayVideo = false;
+                updateVideoState();
+            });
+        });
+
+        // Specials Image Display
+        document.querySelectorAll('.specials-container').forEach(container => {
+            const items = container.querySelectorAll('.special-item');
+            const imageContainer = container.nextElementSibling.querySelector('img');
+
+            items.forEach(item => {
+                item.addEventListener('click', function() {
+                    items.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    const imageSrc = this.getAttribute('data-image');
+                    imageContainer.src = imageSrc;
+                    imageContainer.style.display = 'block';
+                });
             });
         });
     </script>
