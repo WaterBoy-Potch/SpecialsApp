@@ -37,21 +37,23 @@
             </section>
             <section class="previous-specials">
                 <h3>Previous Months' Specials</h3>
-                <div class="specials-container" id="previousSpecials">
-                    <div class="special-item" data-image="coupon-feb2025.jpg">Feb 2025: 15% off Bulk Orders</div>
-                    <div class="special-item" data-image="coupon-jan2025.jpg">Jan 2025: Buy 2 Get 1 Free</div>
-                    <div class="special-item" data-image="coupon-dec2024.jpg">Dec 2024: 10% off All Rentals</div>
-                </div>
+                <select id="previousSpecials" class="specials-dropdown">
+                    <option value="" disabled selected>Select a previous special</option>
+                    <option value="coupon-feb2025.jpg">Feb 2025: 15% off Bulk Orders</option>
+                    <option value="coupon-jan2025.jpg">Jan 2025: Buy 2 Get 1 Free</option>
+                    <option value="coupon-dec2024.jpg">Dec 2024: 10% off All Rentals</option>
+                </select>
                 <div class="special-image-container" id="previousSpecialImage">
                     <img src="" alt="Selected Previous Special" id="previousImage">
                 </div>
             </section>
             <section class="current-specials">
                 <h3>Current Month's Specials</h3>
-                <div class="specials-container" id="currentSpecials">
-                    <div class="special-item" data-image="coupon-mar2025-20off.jpg">March 2025: 20% off 5L Bottles</div>
-                    <div class="special-item" data-image="coupon-mar2025-free.jpg">March 2025: Free Dispenser Rental</div>
-                </div>
+                <select id="currentSpecials" class="specials-dropdown">
+                    <option value="" disabled selected>Select a current special</option>
+                    <option value="coupon-mar2025-20off.jpg">March 2025: 20% off 5L Bottles</option>
+                    <option value="coupon-mar2025-free.jpg">March 2025: Free Dispenser Rental</option>
+                </select>
                 <div class="special-image-container" id="currentSpecialImage">
                     <img src="" alt="Selected Current Special" id="currentImage">
                 </div>
@@ -124,82 +126,88 @@
             const closeVideo = document.getElementById('closeVideo');
             let shouldPlayVideo = true; // Default to true for autoplay on load
 
-            // Ensure video starts with sound
+            // Ensure video settings
             promoVideo.muted = false;
+            promoVideo.volume = 1.0;
+            promoVideo.autoplay = true;
 
-            // Function to update overlay visibility and video state
-            function updateVideoState() {
+            // Function to force video playback with sound
+            function forceVideoPlay() {
                 if (shouldPlayVideo) {
                     videoOverlay.style.display = 'flex';
-                    promoVideo.play().catch(error => {
-                        console.error('Video autoplay failed:', error);
-                        // Fallback: Inform user if sound prevents autoplay
-                        Swal.fire({
-                            title: 'Autoplay Blocked',
-                            text: 'Your browser may require interaction to play video with sound. Click OK to try again.',
-                            icon: 'warning',
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            promoVideo.play();
+                    const playPromise = promoVideo.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            console.log('Video playing with sound on page load.');
+                        }).catch(error => {
+                            console.error('Autoplay failed:', error);
+                            console.log('For unmuted autoplay, host on a server (e.g., live-server).');
                         });
-                    });
-                } else {
-                    promoVideo.pause();
-                    videoOverlay.style.display = 'none';
+                    }
                 }
             }
 
-            // Adjust video container based on orientation
+            // Function to adjust video orientation
             function adjustVideoOrientation() {
-                const videoWidth = promoVideo.videoWidth;
-                const videoHeight = promoVideo.videoHeight;
+                const videoWidth = promoVideo.videoWidth || 16;
+                const videoHeight = promoVideo.videoHeight || 9;
                 const isPortrait = videoHeight > videoWidth;
 
                 if (isPortrait) {
-                    videoContainer.style.maxWidth = '50%'; // Narrower for portrait
-                    videoContainer.style.maxHeight = '80vh'; // Taller to fit portrait
+                    videoContainer.style.maxWidth = '50vw';
+                    videoContainer.style.maxHeight = '80vh';
                     promoVideo.style.width = '100%';
                     promoVideo.style.height = 'auto';
                 } else {
-                    videoContainer.style.maxWidth = '90%'; // Wider for landscape
-                    videoContainer.style.maxHeight = '50vh'; // Shorter for landscape
+                    videoContainer.style.maxWidth = '90vw';
+                    videoContainer.style.maxHeight = '50vh';
                     promoVideo.style.width = '100%';
                     promoVideo.style.height = 'auto';
                 }
             }
 
-            // Wait for video metadata to load to determine orientation
-            promoVideo.addEventListener('loadedmetadata', adjustVideoOrientation);
+            // Trigger playback immediately
+            forceVideoPlay();
 
-            // Initial state on page load
-            updateVideoState();
-
-            // Close button click sets boolean to false
-            closeVideo.addEventListener('click', function() {
-                shouldPlayVideo = false;
-                updateVideoState();
+            // Adjust orientation on metadata load
+            promoVideo.addEventListener('loadedmetadata', function() {
+                adjustVideoOrientation();
+                if (shouldPlayVideo && promoVideo.paused) {
+                    forceVideoPlay(); // Retry if paused
+                }
             });
 
-            // Video end sets boolean to false
+            // Fallback if metadata is already loaded
+            if (promoVideo.readyState >= 1) {
+                adjustVideoOrientation();
+            }
+
+            // Close button click
+            closeVideo.addEventListener('click', function() {
+                shouldPlayVideo = false;
+                promoVideo.pause();
+                videoOverlay.style.display = 'none';
+            });
+
+            // Video end
             promoVideo.addEventListener('ended', function() {
                 shouldPlayVideo = false;
-                updateVideoState();
+                videoOverlay.style.display = 'none';
             });
         });
 
-        // Specials Image Display
-        document.querySelectorAll('.specials-container').forEach(container => {
-            const items = container.querySelectorAll('.special-item');
-            const imageContainer = container.nextElementSibling.querySelector('img');
-
-            items.forEach(item => {
-                item.addEventListener('click', function() {
-                    items.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    const imageSrc = this.getAttribute('data-image');
-                    imageContainer.src = imageSrc;
+        // Specials Dropdown Image Display
+        document.querySelectorAll('.specials-dropdown').forEach(dropdown => {
+            const imageContainer = dropdown.nextElementSibling.querySelector('img');
+            dropdown.addEventListener('change', function() {
+                const selectedValue = this.value;
+                if (selectedValue) {
+                    imageContainer.src = selectedValue;
                     imageContainer.style.display = 'block';
-                });
+                } else {
+                    imageContainer.src = '';
+                    imageContainer.style.display = 'none';
+                }
             });
         });
     </script>

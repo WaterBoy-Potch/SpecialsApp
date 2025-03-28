@@ -8,6 +8,7 @@
 body {
     font-family: 'Open Sans', Arial, sans-serif;
     background: linear-gradient(to bottom, #5db4ff, #ffffff);
+    min-height: 100vh;
     color: #333;
     position: relative;
     overflow-x: hidden;
@@ -18,8 +19,8 @@ body {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
-    max-height: 80vh; /* Increased to accommodate portrait */
+    width: 100vw;
+    max-height: 80vh;
     background: rgba(0, 0, 0, 0.7);
     z-index: 1000;
     display: flex;
@@ -54,9 +55,9 @@ body {
     color: white;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
+    width: clamp(25px, 5vw, 30px); /* Scales with viewport */
+    height: clamp(25px, 5vw, 30px);
+    font-size: clamp(16px, 3vw, 18px);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -72,7 +73,7 @@ body {
 .logo-container {
     display: flex;
     justify-content: center;
-    padding: 12px;
+    padding: clamp(10px, 2vw, 12px); /* Dynamic padding */
 }
 
 .logo {
@@ -84,8 +85,8 @@ body {
 .container {
     text-align: center;
     background-color: transparent;
-    padding: 20px;
-    margin: 5px auto;
+    padding: clamp(15px, 4vw, 20px);
+    margin: clamp(3px, 1vw, 5px) auto;
     max-width: 500px;
     animation: fadeIn 1s ease-in-out;
     position: relative;
@@ -98,122 +99,110 @@ body {
 }
 
 header {
-    margin-bottom: 10px;
+    margin-bottom: clamp(8px, 2vw, 10px);
 }
 
 h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 28px;
+    font-size: clamp(22px, 6vw, 28px);
     color: #005566;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .hero {
-    margin: 10px 0;
+    margin: clamp(8px, 2vw, 10px) 0;
 }
 
 .hero h2 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
+    font-size: clamp(18px, 5vw, 20px);
     color: #0015ff;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .hero p {
-    font-size: 14px;
+    font-size: clamp(11px, 3vw, 14px);
     color: #666;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .current-specials, .previous-specials {
-    margin: 10px 0;
+    margin: clamp(8px, 2vw, 10px) 0;
 }
 
 .current-specials h3, .previous-specials h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
+    font-size: clamp(14px, 4vw, 16px);
     color: #005566;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
-/* Specials Containers */
-.specials-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    max-width: 200px;
-    margin: 0 auto;
-}
-
-.special-item {
-    padding: 4px 8px;
-    font-size: 13px;
+/* Specials Dropdowns */
+.specials-dropdown {
+    width: clamp(180px, 40vw, 200px);
+    padding: clamp(4px, 1vw, 8px);
+    font-size: clamp(11px, 3vw, 13px);
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
     color: #333;
     cursor: pointer;
-    text-align: left;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin: 0 auto;
+    display: block;
+    transition: border-color 0.3s ease;
 }
 
-.special-item:hover {
-    background-color: #f5f5f5;
+.specials-dropdown:hover, .specials-dropdown:focus {
     border-color: #007bff;
-}
-
-.special-item.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #0056b3;
+    outline: none;
 }
 
 .special-image-container {
-    margin-top: 10px;
+    margin-top: clamp(8px, 2vw, 10px);
 }
 
 .special-image-container img {
     display: none;
     max-width: 100%;
-    max-height: 150px;
+    max-height: clamp(120px, 30vw, 150px);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .claim-info {
-    font-size: 13px;
+    font-size: clamp(11px, 3vw, 13px);
     color: #007bff;
-    margin-top: 5px;
+    margin-top: clamp(5px, 1vw, 5px);
     font-weight: bold;
 }
 
 .signup {
-    margin: 10px 0;
+    margin: clamp(8px, 2vw, 10px) 0;
 }
 
 .signup h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
+    font-size: clamp(18px, 5vw, 20px);
     color: #005566;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .signup p {
-    font-size: 14px;
+    font-size: clamp(11px, 3vw, 14px);
     color: #666;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .form-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .btn {
-    padding: 6px 12px;
-    font-size: 15px;
+    padding: clamp(6px, 1.5vw, 12px) clamp(8px, 2vw, 12px);
+    font-size: clamp(13px, 3.5vw, 15px);
     background-color: #007bff;
     color: white;
     border: none;
@@ -232,34 +221,34 @@ h1 {
 }
 
 .form-message {
-    font-size: 13px;
+    font-size: clamp(11px, 3vw, 13px);
     color: #28a745;
     display: none;
-    margin-top: 5px;
+    margin-top: clamp(5px, 1vw, 5px);
     animation: fadeIn 0.5s ease-in-out;
 }
 
 .contact {
-    margin: 10px 0;
+    margin: clamp(8px, 2vw, 10px) 0;
 }
 
 .contact h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 18px;
+    font-size: clamp(16px, 4.5vw, 18px);
     color: #005566;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .contact p {
-    font-size: 13px;
+    font-size: clamp(11px, 3vw, 13px);
     color: #666;
-    margin-bottom: 5px;
+    margin-bottom: clamp(5px, 1vw, 5px);
 }
 
 .contact-link {
     color: #007bff;
     text-decoration: none;
-    margin: 0 3px;
+    margin: 0 clamp(2px, 0.5vw, 3px);
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
@@ -270,28 +259,28 @@ h1 {
 }
 
 .contact-link i {
-    margin-right: 3px;
+    margin-right: clamp(2px, 0.5vw, 3px);
 }
 
 footer {
-    margin-top: 10px;
+    margin-top: clamp(8px, 2vw, 10px);
 }
 
 .footer-line {
     width: 80%;
-    margin: 5px auto;
+    margin: clamp(5px, 1vw, 5px) auto;
     border: 0;
     border-top: 1px solid #666;
 }
 
 .social-links {
-    margin: 5px 0;
+    margin: clamp(5px, 1vw, 5px) 0;
 }
 
 .social-links a {
     color: #007bff;
-    font-size: 18px;
-    margin: 0 6px;
+    font-size: clamp(16px, 4vw, 18px);
+    margin: 0 clamp(4px, 1vw, 6px);
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
@@ -307,83 +296,39 @@ footer {
 
 @media (max-width: 600px) {
     .logo-container {
-        padding: 10px;
+        padding: clamp(8px, 2vw, 10px);
     }
 
     .logo {
         width: 70vw;
         max-width: 270px;
     }
+}
 
+/* Enhanced responsiveness for larger screens */
+@media (min-width: 601px) and (max-width: 900px) {
     .container {
-        padding: 15px;
-        margin: 3px auto;
-    }
-
-    header {
-        margin-bottom: 8px;
+        max-width: 70vw;
     }
 
     h1 {
-        font-size: 22px;
-        margin-bottom: 5px;
+        font-size: clamp(24px, 5vw, 28px);
     }
 
-    .hero h2 {
-        font-size: 18px;
+    .hero h2, .signup h3 {
+        font-size: clamp(18px, 4vw, 20px);
     }
 
-    .hero p, .signup p, .contact p, footer p {
-        font-size: 11px;
-        margin-bottom: 5px;
+    .current-specials h3, .previous-specials h3, .contact h3 {
+        font-size: clamp(14px, 3.5vw, 16px);
     }
 
-    .current-specials h3, .previous-specials h3 {
-        font-size: 14px;
+    .specials-dropdown {
+        width: clamp(180px, 35vw, 200px);
     }
 
-    .signup h3 {
-        font-size: 18px;
-    }
-
-    .specials-container {
-        max-width: 180px;
-    }
-
-    .special-item {
-        font-size: 11px;
-    }
-
-    .special-image-container img {
-        max-height: 120px;
-    }
-
-    .claim-info {
-        font-size: 11px;
-    }
-
-    .video-overlay {
-        max-height: 80vh; /* Matches desktop for portrait support */
-    }
-
-    .video-container {
-        width: 100%;
-    }
-
-    .close-button-layer {
-        top: 8px;
-        right: 8px;
-    }
-
-    .close-video {
-        width: 25px;
-        height: 25px;
-        font-size: 16px;
-    }
-
-    .footer-line {
-        width: 90%;
-        margin: 5px auto;
+    .btn {
+        padding: clamp(6px, 1.2vw, 10px) clamp(8px, 1.5vw, 12px);
     }
 }
 
