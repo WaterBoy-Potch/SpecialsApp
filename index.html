@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="wave.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="video-overlay" id="videoOverlay">
         <div class="video-container">
-            <video id="promoVideo" controls autoplay>
+            <video id="promoVideo" controls>
                 <source src="PromoAd.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+            <button class="play-pause-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
         </div>
         <div class="close-button-layer" id="closeButtonLayer">
             <button class="close-video" id="closeVideo"><i class="fas fa-times"></i></button>
@@ -37,22 +37,18 @@
             </section>
             <section class="previous-specials">
                 <h3>Previous Months' Specials</h3>
-                <select id="previousSpecials" class="specials-dropdown">
-                    <option value="" disabled selected>Select a previous special</option>
-                    <option value="coupon-feb2025.jpg">Feb 2025: 15% off Bulk Orders</option>
-                    <option value="coupon-jan2025.jpg">Jan 2025: Buy 2 Get 1 Free</option>
-                    <option value="coupon-dec2024.jpg">Dec 2024: 10% off All Rentals</option>
+                <select id="previousSpecials" class="specials-dropdown readonly">
+                    <option value="" selected>View previous specials</option>
+                    <option value="feb2025">Feb 2025: 15% off Bulk Orders</option>
+                    <option value="jan2025">Jan 2025: Buy 2 Get 1 Free</option>
+                    <option value="dec2024">Dec 2024: 10% off All Rentals</option>
                 </select>
-                <div class="special-image-container" id="previousSpecialImage">
-                    <img src="" alt="Selected Previous Special" id="previousImage">
-                </div>
             </section>
             <section class="current-specials">
                 <h3>Current Month's Specials</h3>
                 <select id="currentSpecials" class="specials-dropdown">
                     <option value="" disabled selected>Select a current special</option>
-                    <option value="coupon-mar2025-20off.jpg">March 2025: 20% off 5L Bottles</option>
-                    <option value="coupon-mar2025-free.jpg">March 2025: Free Dispenser Rental</option>
+                    <!-- Populated dynamically -->
                 </select>
                 <div class="special-image-container" id="currentSpecialImage">
                     <img src="" alt="Selected Current Special" id="currentImage">
@@ -87,67 +83,55 @@
     </div>
 
     <script>
+        // List of coupons in CurrentCoupons (manually maintained)
+        const currentCoupons = [
+            { path: 'CurrentCoupons/coupon-mar2025-20off.jpg', name: 'March 2025: 20% off 5L Bottles' },
+            { path: 'CurrentCoupons/coupon-mar2025-free.jpg', name: 'March 2025: Free Dispenser Rental' }
+            // Add new .jpg files here as they are added to CurrentCoupons
+        ];
+
         // Client Form Submission
         document.getElementById('client-form').addEventListener('submit', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             const formMessage = document.getElementById('form-message');
+            formMessage.textContent = 'Redirecting to sign-up form...';
+            formMessage.style.display = 'block';
+            formMessage.style.color = '#28a745';
 
-            formMessage.textContent = '';
-            formMessage.style.display = 'none';
+            window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=sharing', '_blank');
 
-            Swal.fire({
-                title: 'Customer Status',
-                text: 'Are you an existing WaterBoy customer or a new one?',
-                showCancelButton: true,
-                confirmButtonText: 'Existing',
-                cancelButtonText: 'New',
-                icon: 'question'
-            }).then((result) => {
-                formMessage.style.display = 'block';
-                if (result.isConfirmed) {
-                    window.open('https://docs.google.com/forms/d/e/1FAIpQLScSOBn22FQYogZYlcj77if4YDsFU2CNYvwpadEq_5ZsxcovDQ/viewform?usp=sharing', '_blank');
-                    formMessage.textContent = 'Welcome back, existing customer!';
-                    formMessage.style.color = '#28a745';
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    window.open('https://docs.google.com/forms/d/e/1FAIpQLSd1q-aAeSbdo8dYVz2TmSkEriaobTH3XX0iWkchwUo8u2fSfQ/viewform?usp=sharing', '_blank');
-                    formMessage.textContent = 'Welcome, new customer!';
-                    formMessage.style.color = '#28a745';
-                }
-            });
+            setTimeout(() => {
+                formMessage.textContent = '';
+                formMessage.style.display = 'none';
+            }, 2000);
         });
 
-        // Video Overlay Functionality with Boolean and Orientation Handling
+        // Video Overlay and Coupon Display Functionality
         document.addEventListener('DOMContentLoaded', function() {
             const videoOverlay = document.getElementById('videoOverlay');
             const videoContainer = document.querySelector('.video-container');
             const promoVideo = document.getElementById('promoVideo');
+            const playPauseBtn = document.getElementById('playPauseBtn');
             const closeVideo = document.getElementById('closeVideo');
-            let shouldPlayVideo = true; // Default to true for autoplay on load
+            const currentDropdown = document.getElementById('currentSpecials');
+            const currentImage = document.getElementById('currentImage');
+            let isPlaying = false;
 
-            // Ensure video settings
+            // Populate Current Specials dropdown
+            currentCoupons.forEach(coupon => {
+                const option = document.createElement('option');
+                option.value = coupon.path;
+                option.textContent = coupon.name;
+                currentDropdown.appendChild(option);
+            });
+
+            // Initial video settings
             promoVideo.muted = false;
             promoVideo.volume = 1.0;
-            promoVideo.autoplay = true;
 
-            // Function to force video playback with sound
-            function forceVideoPlay() {
-                if (shouldPlayVideo) {
-                    videoOverlay.style.display = 'flex';
-                    const playPromise = promoVideo.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            console.log('Video playing with sound on page load.');
-                        }).catch(error => {
-                            console.error('Autoplay failed:', error);
-                            console.log('For unmuted autoplay, host on a server (e.g., live-server).');
-                        });
-                    }
-                }
-            }
-
-            // Function to adjust video orientation
+            // Adjust video orientation
             function adjustVideoOrientation() {
                 const videoWidth = promoVideo.videoWidth || 16;
                 const videoHeight = promoVideo.videoHeight || 9;
@@ -166,47 +150,60 @@
                 }
             }
 
-            // Trigger playback immediately
-            forceVideoPlay();
-
-            // Adjust orientation on metadata load
-            promoVideo.addEventListener('loadedmetadata', function() {
-                adjustVideoOrientation();
-                if (shouldPlayVideo && promoVideo.paused) {
-                    forceVideoPlay(); // Retry if paused
+            // Toggle play/pause
+            playPauseBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    promoVideo.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    promoVideo.play().catch(error => {
+                        console.error('Video play failed:', error);
+                    });
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 }
+                isPlaying = !isPlaying;
             });
 
-            // Fallback if metadata is already loaded
+            promoVideo.addEventListener('play', function() {
+                isPlaying = true;
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            });
+
+            promoVideo.addEventListener('pause', function() {
+                isPlaying = false;
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+
+            promoVideo.addEventListener('loadedmetadata', adjustVideoOrientation);
             if (promoVideo.readyState >= 1) {
                 adjustVideoOrientation();
             }
 
-            // Close button click
             closeVideo.addEventListener('click', function() {
-                shouldPlayVideo = false;
                 promoVideo.pause();
                 videoOverlay.style.display = 'none';
             });
 
-            // Video end
             promoVideo.addEventListener('ended', function() {
-                shouldPlayVideo = false;
                 videoOverlay.style.display = 'none';
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                isPlaying = false;
             });
-        });
 
-        // Specials Dropdown Image Display
-        document.querySelectorAll('.specials-dropdown').forEach(dropdown => {
-            const imageContainer = dropdown.nextElementSibling.querySelector('img');
-            dropdown.addEventListener('change', function() {
+            // Prevent Previous Specials selection
+            document.getElementById('previousSpecials').addEventListener('change', function() {
+                this.value = ''; // Reset to default "View previous specials"
+            });
+
+            // Display selected coupon image
+            currentDropdown.addEventListener('change', function() {
                 const selectedValue = this.value;
                 if (selectedValue) {
-                    imageContainer.src = selectedValue;
-                    imageContainer.style.display = 'block';
+                    currentImage.src = selectedValue;
+                    currentImage.style.display = 'block';
                 } else {
-                    imageContainer.src = '';
-                    imageContainer.style.display = 'none';
+                    currentImage.src = '';
+                    currentImage.style.display = 'none';
                 }
             });
         });
