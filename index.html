@@ -11,18 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="video-overlay" id="videoOverlay">
-        <div class="video-container">
-            <video id="promoVideo" controls>
-                <source src="PromoAd.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <button class="play-pause-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
-        </div>
-        <div class="close-button-layer" id="closeButtonLayer">
-            <button class="close-video" id="closeVideo"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
     <div class="container">
         <header>
             <div class="logo-container">
@@ -39,15 +27,13 @@
                 <h3>Past Monthly Specials</h3>
                 <select id="previousSpecials" class="specials-dropdown readonly">
                     <option value="" selected>Check out past specials</option>
-                    <!-- Populated dynamically from coupon/PreviousCoupon.txt -->
-                </select>
+                    </select>
             </section>
             <section class="current-specials">
                 <h3>This Month's Specials</h3>
                 <select id="currentSpecials" class="specials-dropdown readonly">
                     <option value="" disabled selected>Explore this month's specials</option>
-                    <!-- Populated dynamically from coupon/CurrentCoupon.txt -->
-                </select>
+                    </select>
                 <p class="claim-info">Sign up below to claim your coupons!</p>
             </section>
             <section class="signup">
@@ -64,6 +50,7 @@
                 <h3>Want the Latest Deals?</h3>
                 <p>Reach out to learn more about our current offers on rentals and deliveries:</p>
                 <p><a href="mailto:water8boy@gmail.com" class="contact-link"><i class="fas fa-envelope"></i> water8boy@gmail.com</a> | <a href="tel:+27789069543" class="contact-link"><i class="fas fa-phone"></i> +27 78 906 9543</a></p>
+                <button id="videoButton" class="btn">Watch Promo Video</button>
             </section>
         </main>
         <footer>
@@ -96,16 +83,10 @@
             }, 2000);
         });
 
-        // Video Overlay and Specials Display Functionality
+        // Specials Display Functionality
         document.addEventListener('DOMContentLoaded', async function() {
-            const videoOverlay = document.getElementById('videoOverlay');
-            const videoContainer = document.querySelector('.video-container');
-            const promoVideo = document.getElementById('promoVideo');
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            const closeVideo = document.getElementById('closeVideo');
             const currentDropdown = document.getElementById('currentSpecials');
             const previousDropdown = document.getElementById('previousSpecials');
-            let isPlaying = false;
 
             // Function to populate dropdown from text file
             async function populateDropdown(dropdown, fileUrl) {
@@ -138,69 +119,6 @@
             await populateDropdown(currentDropdown, 'coupon/CurrentCoupon.txt');
             await populateDropdown(previousDropdown, 'coupon/PreviousCoupon.txt');
 
-            // Initial video settings
-            promoVideo.muted = false;
-            promoVideo.volume = 1.0;
-
-            // Adjust video orientation
-            function adjustVideoOrientation() {
-                const videoWidth = promoVideo.videoWidth || 16;
-                const videoHeight = promoVideo.videoHeight || 9;
-                const isPortrait = videoHeight > videoWidth;
-
-                if (isPortrait) {
-                    videoContainer.style.maxWidth = '50vw';
-                    videoContainer.style.maxHeight = '80vh';
-                    promoVideo.style.width = '100%';
-                    promoVideo.style.height = 'auto';
-                } else {
-                    videoContainer.style.maxWidth = '90vw';
-                    videoContainer.style.maxHeight = '50vh';
-                    promoVideo.style.width = '100%';
-                    promoVideo.style.height = 'auto';
-                }
-            }
-
-            // Toggle play/pause
-            playPauseBtn.addEventListener('click', function() {
-                if (isPlaying) {
-                    promoVideo.pause();
-                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                } else {
-                    promoVideo.play().catch(error => {
-                        console.error('Video play failed:', error);
-                    });
-                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                }
-                isPlaying = !isPlaying;
-            });
-
-            promoVideo.addEventListener('play', function() {
-                isPlaying = true;
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            });
-
-            promoVideo.addEventListener('pause', function() {
-                isPlaying = false;
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-            });
-
-            promoVideo.addEventListener('loadedmetadata', adjustVideoOrientation);
-            if (promoVideo.readyState >= 1) {
-                adjustVideoOrientation();
-            }
-
-            closeVideo.addEventListener('click', function() {
-                promoVideo.pause();
-                videoOverlay.style.display = 'none';
-            });
-
-            promoVideo.addEventListener('ended', function() {
-                videoOverlay.style.display = 'none';
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                isPlaying = false;
-            });
-
             // Prevent selection in both dropdowns
             previousDropdown.addEventListener('change', function() {
                 this.value = ''; // Reset to default "Check out past specials"
@@ -208,6 +126,11 @@
 
             currentDropdown.addEventListener('change', function() {
                 this.value = ''; // Reset to default "Explore this month's specials"
+            });
+
+            //video button
+            document.getElementById('videoButton').addEventListener('click', function(){
+                window.open('video.html', '_blank');
             });
         });
     </script>
