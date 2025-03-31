@@ -39,20 +39,15 @@
                 <h3>Previous Months' Specials</h3>
                 <select id="previousSpecials" class="specials-dropdown readonly">
                     <option value="" selected>View previous specials</option>
-                    <option value="feb2025">Feb 2025: 15% off Bulk Orders</option>
-                    <option value="jan2025">Jan 2025: Buy 2 Get 1 Free</option>
-                    <option value="dec2024">Dec 2024: 10% off All Rentals</option>
+                    <!-- Populated dynamically from PreviousCoupon.txt -->
                 </select>
             </section>
             <section class="current-specials">
                 <h3>Current Month's Specials</h3>
-                <select id="currentSpecials" class="specials-dropdown">
-                    <option value="" disabled selected>Select a current special</option>
-                    <!-- Populated dynamically -->
+                <select id="currentSpecials" class="specials-dropdown readonly">
+                    <option value="" disabled selected>View current specials</option>
+                    <!-- Populated dynamically from CurrentCoupon.txt -->
                 </select>
-                <div class="special-image-container" id="currentSpecialImage">
-                    <img src="" alt="Selected Current Special" id="currentImage">
-                </div>
                 <p class="claim-info">To claim a coupon, please sign up below!</p>
             </section>
             <section class="signup">
@@ -83,13 +78,6 @@
     </div>
 
     <script>
-        // List of coupons in CurrentCoupons (manually maintained)
-        const currentCoupons = [
-            { path: 'CurrentCoupons/coupon-mar2025-20off.jpg', name: 'March 2025: 20% off 5L Bottles' },
-            { path: 'CurrentCoupons/coupon-mar2025-free.jpg', name: 'March 2025: Free Dispenser Rental' }
-            // Add new .jpg files here as they are added to CurrentCoupons
-        ];
-
         // Client Form Submission
         document.getElementById('client-form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -108,24 +96,41 @@
             }, 2000);
         });
 
-        // Video Overlay and Coupon Display Functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        // Video Overlay and Specials Display Functionality
+        document.addEventListener('DOMContentLoaded', async function() {
             const videoOverlay = document.getElementById('videoOverlay');
             const videoContainer = document.querySelector('.video-container');
             const promoVideo = document.getElementById('promoVideo');
             const playPauseBtn = document.getElementById('playPauseBtn');
             const closeVideo = document.getElementById('closeVideo');
             const currentDropdown = document.getElementById('currentSpecials');
-            const currentImage = document.getElementById('currentImage');
+            const previousDropdown = document.getElementById('previousSpecials');
             let isPlaying = false;
 
-            // Populate Current Specials dropdown
-            currentCoupons.forEach(coupon => {
-                const option = document.createElement('option');
-                option.value = coupon.path;
-                option.textContent = coupon.name;
-                currentDropdown.appendChild(option);
-            });
+            // Function to populate dropdown from text file
+            async function populateDropdown(dropdown, fileUrl) {
+                try {
+                    const response = await fetch(fileUrl);
+                    if (!response.ok) throw new Error(`Failed to fetch ${fileUrl}`);
+                    const text = await response.text();
+                    const specials = text.split('\n').filter(line => line.trim() !== ''); // Split by newline, remove empty lines
+                    specials.forEach(special => {
+                        const option = document.createElement('option');
+                        option.value = special; // Value is the same as text for simplicity
+                        option.textContent = special;
+                        dropdown.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error loading specials:', error);
+                    const option = document.createElement('option');
+                    option.textContent = 'Error loading specials';
+                    dropdown.appendChild(option);
+                }
+            }
+
+            // Load specials from text files
+            await populateDropdown(currentDropdown, 'CurrentCoupon.txt');
+            await populateDropdown(previousDropdown, 'PreviousCoupon.txt');
 
             // Initial video settings
             promoVideo.muted = false;
@@ -190,21 +195,13 @@
                 isPlaying = false;
             });
 
-            // Prevent Previous Specials selection
-            document.getElementById('previousSpecials').addEventListener('change', function() {
+            // Prevent selection in both dropdowns
+            previousDropdown.addEventListener('change', function() {
                 this.value = ''; // Reset to default "View previous specials"
             });
 
-            // Display selected coupon image
             currentDropdown.addEventListener('change', function() {
-                const selectedValue = this.value;
-                if (selectedValue) {
-                    currentImage.src = selectedValue;
-                    currentImage.style.display = 'block';
-                } else {
-                    currentImage.src = '';
-                    currentImage.style.display = 'none';
-                }
+                this.value = ''; // Reset to default "View current specials"
             });
         });
     </script>
