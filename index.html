@@ -113,12 +113,12 @@
                     const response = await fetch(fileUrl);
                     if (!response.ok) throw new Error(`Failed to fetch ${fileUrl}`);
                     const text = await response.text();
-                    const specials = text.split('\n').filter(line => line.trim() !== ''); // Split by newline, remove empty lines
+                    const specials = text.split('|').filter(line => line.trim() !== ''); // Split by "|", remove empty entries
 
                     specials.forEach(special => {
                         // Parse 'Month'{Year}:"Provider";[Description]
                         const cleanedSpecial = special
-                            .replace(/['"[\]{];]/g, '') // Remove ', ", [, ], {, }, ;
+                            .replace(/['"[\]{};]/g, '') // Remove ', ", [, ], {, }, ;
                             .replace(/(\w+)(\d+):(\w+):(.+)/, '$1 $2: $3 - $4'); // Format as "Month Year: Provider - Description"
                         
                         const option = document.createElement('option');
