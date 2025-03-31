@@ -39,14 +39,14 @@
                 <h3>Previous Months' Specials</h3>
                 <select id="previousSpecials" class="specials-dropdown readonly">
                     <option value="" selected>View previous specials</option>
-                    <!-- Populated dynamically from PreviousCoupon.txt -->
+                    <!-- Populated dynamically from coupon/PreviousCoupon.txt -->
                 </select>
             </section>
             <section class="current-specials">
                 <h3>Current Month's Specials</h3>
                 <select id="currentSpecials" class="specials-dropdown readonly">
                     <option value="" disabled selected>View current specials</option>
-                    <!-- Populated dynamically from CurrentCoupon.txt -->
+                    <!-- Populated dynamically from coupon/CurrentCoupon.txt -->
                 </select>
                 <p class="claim-info">To claim a coupon, please sign up below!</p>
             </section>
@@ -114,10 +114,16 @@
                     if (!response.ok) throw new Error(`Failed to fetch ${fileUrl}`);
                     const text = await response.text();
                     const specials = text.split('\n').filter(line => line.trim() !== ''); // Split by newline, remove empty lines
+
                     specials.forEach(special => {
+                        // Parse 'Month'{Year}:"Provider";[Description]
+                        const cleanedSpecial = special
+                            .replace(/['"[\]{];]/g, '') // Remove ', ", [, ], {, }, ;
+                            .replace(/(\w+)(\d+):(\w+):(.+)/, '$1 $2: $3 - $4'); // Format as "Month Year: Provider - Description"
+                        
                         const option = document.createElement('option');
-                        option.value = special; // Value is the same as text for simplicity
-                        option.textContent = special;
+                        option.value = cleanedSpecial; // Value is the cleaned text
+                        option.textContent = cleanedSpecial;
                         dropdown.appendChild(option);
                     });
                 } catch (error) {
@@ -128,9 +134,9 @@
                 }
             }
 
-            // Load specials from text files
-            await populateDropdown(currentDropdown, 'CurrentCoupon.txt');
-            await populateDropdown(previousDropdown, 'PreviousCoupon.txt');
+            // Load specials from text files in coupon/ folder
+            await populateDropdown(currentDropdown, 'coupon/CurrentCoupon.txt');
+            await populateDropdown(previousDropdown, 'coupon/PreviousCoupon.txt');
 
             // Initial video settings
             promoVideo.muted = false;

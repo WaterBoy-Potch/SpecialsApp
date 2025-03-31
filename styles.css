@@ -189,18 +189,6 @@ main {
     opacity: 0.9;
 }
 
-.special-image-container {
-    margin-top: clamp(8px, 2vw, 10px);
-}
-
-.special-image-container img {
-    display: none;
-    max-width: 100%;
-    max-height: clamp(120px, 30vw, 150px);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .claim-info {
     font-size: clamp(11px, 3vw, 13px);
     color: #007bff;
