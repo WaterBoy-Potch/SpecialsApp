@@ -1,46 +1,57 @@
-# Water Boy Monthly Specials
+# Responsive Web Page with Specials and Signup
 
-A responsive web application designed to showcase Water Boy's monthly specials and coupons. The app features a promotional video overlay, a sign-up form for exclusive offers, and social media links. It is built with HTML, CSS, and JavaScript, utilizing external libraries for enhanced functionality.
-
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Setup](#setup)
-- [File Structure](#file-structure)
-- [Usage](#usage)
-- [Customization](#customization)
-- [Dependencies](#dependencies)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Overview
-This project is a "Coming Soon" page for Water Boy's monthly specials web app. It aims to engage users with a video overlay on page load, provide information about past and current specials, and encourage sign-ups for exclusive offers. The design is mobile-friendly and includes a clean, modern aesthetic with a gradient background.
+This project is a responsive web page designed to display current and previous specials, provide a signup form, and offer contact information.
 
 ## Features
-- **Video Overlay**: A promotional video appears at the top of the page (7/24 of viewport height) on load, with a close button.
-- **Responsive Design**: Adapts to various screen sizes, with a larger logo and adjusted layouts for mobile devices.
-- **Sign-Up Form**: Users can indicate if they are existing customers, triggering a SweetAlert2 popup and redirecting to Google Forms.
-- **Specials Dropdowns**: View past and current specials (past specials are read-only).
-- **Social Media & Contact Links**: Footer includes links to Facebook, Instagram, email, and phone, separated by a horizontal line.
-- **Custom Styling**: Uses Montserrat and Open Sans fonts, with a blue gradient background.
 
-## Setup
-To run this project locally, follow these steps:
+-   **Responsive Design:** Utilizes `clamp()` for fluid typography and spacing, and media queries for optimal viewing on various devices.
+-   **Specials Dropdowns:** Displays current and previous specials using dropdown menus.
+-   **Signup Form:** Includes a simple signup section with a button.
+-   **Contact Information:** Provides contact details and social media links.
+-   **Gradient Background:** Features a visually appealing gradient background.
+-   **Accessibility:** Includes a `prefers-reduced-motion` media query to accommodate users with motion sensitivities.
 
-1. **Clone or Download**:
-   - Clone this repository: `git clone <repository-url>`
-   - Or download the ZIP file and extract it.
+## Technologies Used
 
-2. **Open the Project**:
-   - Navigate to the project folder.
-   - Open `index.html` in a web browser (e.g., Chrome, Firefox) to view the page locally. No server is required as it’s a static site.
+-   HTML (structure - not provided but implied)
+-   CSS (styling)
 
-3. **Ensure Internet Access**:
-   - The project relies on external CDNs for Font Awesome, Google Fonts, and SweetAlert2. An internet connection is needed unless you host these locally.
+## Installation
 
-4. **Optional: Local Server**:
-   - For a more robust local setup, use a tool like `live-server` (via npm) or Python’s HTTP server:
-     - `npx live-server`
-     - `python -m http.server 8000`
+1.  Clone the repository to your local machine:
 
-## File Structure
+    ```bash
+    git clone [repository_url]
+    ```
+
+2.  Open the `index.html` file (or the main HTML file) in your web browser.
+
+## Usage
+
+-   View the current and previous specials using the dropdown menus.
+-   Sign up for updates using the signup form.
+-   Contact the site owner through the provided contact information and social media links.
+
+## Customization
+
+-   Modify the CSS in `styles.css` to change the appearance of the web page.
+-   Replace the placeholder content with your own text and images.
+-   Add or remove sections as needed.
+
+## Media Queries
+
+-   **Max-width: 600px:** Styles for small screens (mobile devices).
+-   **Min-width: 601px and Max-width: 900px:** Styles for medium screens (tablets).
+-   **Prefers-reduced-motion:** Disables animations and transitions for users with motion sensitivities.
+
+## Contributing
+
+Feel free to contribute to this project by submitting pull requests or opening issues.
+
+## Author
+
+[Your Name/Organization Name]
+
+## License
+
+[Your License - e.g., MIT, Apache 2.0]
