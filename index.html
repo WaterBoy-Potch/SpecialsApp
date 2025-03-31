@@ -27,13 +27,13 @@
                 <h3>Past Monthly Specials</h3>
                 <select id="previousSpecials" class="specials-dropdown readonly">
                     <option value="" selected>Check out past specials</option>
-                    </select>
+                </select>
             </section>
             <section class="current-specials">
                 <h3>This Month's Specials</h3>
                 <select id="currentSpecials" class="specials-dropdown readonly">
                     <option value="" disabled selected>Explore this month's specials</option>
-                    </select>
+                </select>
                 <p class="claim-info">Sign up below to claim your coupons!</p>
             </section>
             <section class="signup">
@@ -42,6 +42,7 @@
                 <form id="client-form">
                     <div class="form-group">
                         <button type="submit" class="btn">Sign Up Now</button>
+                        <button id="videoButton" class="btn video-btn">Watch Promo Video</button>
                     </div>
                     <p class="form-message" id="form-message"></p>
                 </form>
@@ -50,7 +51,6 @@
                 <h3>Want the Latest Deals?</h3>
                 <p>Reach out to learn more about our current offers on rentals and deliveries:</p>
                 <p><a href="mailto:water8boy@gmail.com" class="contact-link"><i class="fas fa-envelope"></i> water8boy@gmail.com</a> | <a href="tel:+27789069543" class="contact-link"><i class="fas fa-phone"></i> +27 78 906 9543</a></p>
-                <button id="videoButton" class="btn">Watch Promo Video</button>
             </section>
         </main>
         <footer>
@@ -94,16 +94,15 @@
                     const response = await fetch(fileUrl);
                     if (!response.ok) throw new Error(`Failed to fetch ${fileUrl}`);
                     const text = await response.text();
-                    const specials = text.split('|').filter(line => line.trim() !== ''); // Split by "|", remove empty entries
+                    const specials = text.split('|').filter(line => line.trim() !== '');
 
                     specials.forEach(special => {
-                        // Parse 'Month'{Year}:"Provider";[Description]
                         const cleanedSpecial = special
-                            .replace(/['"[\]{};]/g, '') // Remove ', ", [, ], {, }, ;
-                            .replace(/(\w+)(\d+):(\w+):(.+)/, '$1 $2: $3 - $4'); // Format as "Month Year: Provider - Description"
-                        
+                            .replace(/['"[\]{};]/g, '')
+                            .replace(/(\w+)(\d+):(\w+):(.+)/, '$1 $2: $3 - $4');
+
                         const option = document.createElement('option');
-                        option.value = cleanedSpecial; // Value is the cleaned text
+                        option.value = cleanedSpecial;
                         option.textContent = cleanedSpecial;
                         dropdown.appendChild(option);
                     });
@@ -116,16 +115,20 @@
             }
 
             // Load specials from text files in coupon/ folder
-            await populateDropdown(currentDropdown, 'coupon/CurrentCoupon.txt');
-            await populateDropdown(previousDropdown, 'coupon/PreviousCoupon.txt');
+            try {
+                await populateDropdown(currentDropdown, 'coupon/CurrentCoupon.txt');
+                await populateDropdown(previousDropdown, 'coupon/PreviousCoupon.txt');
+            } catch (error) {
+                console.error("Error loading coupons", error);
+            }
 
             // Prevent selection in both dropdowns
             previousDropdown.addEventListener('change', function() {
-                this.value = ''; // Reset to default "Check out past specials"
+                this.value = '';
             });
 
             currentDropdown.addEventListener('change', function() {
-                this.value = ''; // Reset to default "Explore this month's specials"
+                this.value = '';
             });
 
             //video button

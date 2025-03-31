@@ -259,3 +259,7 @@ footer {
         transition: none;
     }
 }
+
+.video-btn {
+    margin-left: 10px; /* Adds space between the buttons */
+}
