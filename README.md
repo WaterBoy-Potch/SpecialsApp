@@ -50,8 +50,4 @@ Feel free to contribute to this project by submitting pull requests or opening i
 
 ## Author
 
-[Your Name/Organization Name]
-
-## License
-
-[Your License - e.g., MIT, Apache 2.0]
+Lance de Beer
